@@ -23,3 +23,4 @@ module.exports = gulp =
 
   #utils
   createGlobStream: require('./createFilesStream')
+  readFile: require('./readFile')
