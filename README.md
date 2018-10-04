@@ -16,6 +16,8 @@
 </tr>
 </table>
 
+This project is in it's early stages. If something is not working or you would like a new feature please use the issues page.
+
 ## Usage
 
 ```javascript
@@ -66,20 +68,55 @@ gulp.task('copy', function(){
 // default task gets called when you run the `gulp` command
 gulp.task('default', function(){
   gulp.run('templates', 'scripts', 'copy');
+
+  // watch files and run scripts if they change
+  gulp.watch("./client/js/**", function(event){
+    gulp.run('scripts');
+  });
+
+  gulp.watch("./client/templates/**", function(event){
+    gulp.run('templates');
+  });
+
 });
 ```
 
 ### gulp.files(glob[, opt])
 
-Takes a glob and represents an array of files with no structure. Can be piped to a folder.
+Takes a glob and represents a file structure. Can be piped to plugins.
+
+```javascript
+gulp.files("./client/templates/*.jade")
+    .pipe(jade())
+    .pipe(minify())
+    .pipe(gulp.folder("./public/minified_templates"));
+```
 
 ### gulp.folder(path[, opt])
 
-Takes a folder path and represents it's structure. Can be piped to and it will write files. Re-emits all data passed to it so you can pipe to multiple folders.
+Can be piped to and it will write files. Re-emits all data passed to it so you can pipe to multiple folders.
+
+```javascript
+gulp.files("./client/templates/*.jade")
+    .pipe(jade())
+    .pipe(gulp.folder("./public/templates"))
+    .pipe(minify())
+    .pipe(gulp.folder("./public/minified_templates"));
+```
 
 ### gulp.task(name, fn)
 
 All steps code must be defined within a task. Tasks that you want to run from the command line should not have spaces in them.
+
+```javascript
+gulp.task('somename', function(){
+  // do stuff
+});
+
+gulp.task('default', function(){
+  gulp.run('somename');
+});
+```
 
 Tasks can be executed by running `gulp <taskname> <othertask> <somethingelse>`
 
@@ -88,13 +125,23 @@ Just running `gulp` will execute the task you registered called default.
 
 ### gulp.run(tasks...)
 
-Executes tasks in order.
+Triggers tasks to be executed. Does not run in order.
 
 ```javascript
 gulp.run('scripts', 'copyfiles', 'builddocs');
 ```
 
 Use gulp.run to run tasks from other tasks. You will probably use this in your default task and to group small tasks into larger tasks.
+
+### gulp.watch(glob, cb)
+
+glob can be a standard glob or an array of globs. cb is called on each fs change with an object describing the change.
+
+```javascript
+gulp.watch("js/**/*.js", function(event){
+  gulp.run('scripts', 'copyfiles');
+});
+```
 
 ## Writing a plugin
 
@@ -105,6 +152,7 @@ Tips:
 1. file.contents should always be a Buffer before passing it off
 2. Use the `clone` module to clone the file object. Do not mutate the file object before cloning it! The piece that passed it to you may still be using it for something.
 3. Make use of the gulp-util library. Do you need to change a file's extension or do some tedious path crap? Try looking there first and add it if it doesn't exist.
+4. Remember: Your plugin should only do one thing! It should not compile and compress. It should not have a complex config object that makes it do multiple things. This is not grunt.
 
 ```javascript
 var es = require('event-stream'),
