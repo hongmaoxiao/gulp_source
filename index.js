@@ -21,7 +21,7 @@ Gulp.prototype.log = function () {
     return;
   }
   var sig = '[' + chalk.green('gulp') + ']';
-  var args = [].slice.call(arguments);
+  var args = Array.prototype.slice.call(arguments);
   args.unshift(sig);
   console.log.apply(console, args);
   return this;
@@ -29,11 +29,12 @@ Gulp.prototype.log = function () {
 
 Gulp.prototype.taskQueue = Gulp.prototype.seq;
 Gulp.prototype.task = Gulp.prototype.add;
-Gulp.prototype.run = function (tasks) {
-  if (!tasks || !tasks.length) {
+Gulp.prototype.run = function () {
+  var tasks = Array.prototype.slice.call(arguments);
+  if (!tasks.length) {
     tasks = ['default'];
   }
-  this.start(tasks);
+  this.start.apply(this, tasks);
 };
 Gulp.prototype.src = require('./lib/createInputStream');
 Gulp.prototype.dest = require('./lib/createOutputStream');
