@@ -6,8 +6,23 @@ var Orchestrator = require('orchestrator');
 
 function Gulp() {
   Orchestrator.call(this);
+  this.env = {};
+  this.on('task_start', function (e) {
+    gulp.log('Running', "'" + chalk.cyan(e.task) + "'...");
+  });
 };
 util.inherits(Gulp, Orchestrator);
+
+Gulp.prototype.log = function () {
+  if (this.env.silent) {
+    return;
+  }
+  var sig = '[' + chalk.green('gulp') + ']';
+  var args = [].slice.call(arguments);
+  args.unshift(sig);
+  console.log.apply(console, args);
+  return this;
+};
 
 Gulp.prototype.taskQueue = Gulp.prototype.seq;
 Gulp.prototype.task = Gulp.prototype.add;
