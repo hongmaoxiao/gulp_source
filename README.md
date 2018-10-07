@@ -220,7 +220,19 @@ gulp.env is an optimist arguments object. Running `gulp test dostuff --productio
 
 ## gulp cli
 
+### Tasks
+
 Tasks can be executed by running `gulp <taskname> <othertask> <somethingelse>`. Just running `gulp` will execute the task you registered called `default`. If there is no `default` task gulp will error.
+
+### Compilers
+
+You can use any language you want for your gulpfile. You will have to specify the language module name so the CLI can load it (and its assosciated extensions) before attempting to find your gulpfile. Make sure you have this module installed accessible by the folder you are running the CLI in.
+
+Example:
+
+```
+gulp dosomething --require coffee-script
+```
 
 
 ## Writing a plugin
@@ -240,6 +252,9 @@ module.exports = function(header){
   function modifyContents(file, cb){
     // remember that contents is ALWAYS a buffer
     file.contents = new Buffer(header + String(file.contents));
+
+    // first argument is an error if one exists
+    // second argument is the modified file object
     cb(null, file);
   }
 
@@ -267,7 +282,8 @@ gulp.src('./client/scripts/*.js')
 3. Make use of the gulp-util library. Do you need to change a file's extension or do some tedious path crap? Try looking there first and add it if it doesn't exist
 4. Use gulp.log when you need to log messages
 5. Remember: Your plugin should only do one thing! It should not have a complex config object that makes it do multiple things. It should not concat and add headers/footers. This is not grunt. Keep it simple.
-6. Add "gulpplugin" as a keyword in your package.json so you show up on our search
+6. Do not throw errors. Emit them from the stream (or pass them to the callback if using event-stream's .map).
+7. Add "gulpplugin" as a keyword in your package.json so you show up on our search
 
 ## LICENSE
 
