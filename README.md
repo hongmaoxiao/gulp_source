@@ -33,6 +33,8 @@ You can view a list of plugins by going to [this npm search](https://npmjs.org/s
 
 ## Usage
 
+This code goes in your `Gulpfile.js` (case insensitive) at the root of your project. For more information on how to use other languages check the [compilers](#compilers) section.
+
 ```javascript
 var gulp = require('gulp');
 var jade = require('gulp-jade');
@@ -50,7 +52,7 @@ gulp.task('templates', function(){
 gulp.task('scripts', function(){
   
   // compile, minify, and copy coffeescript
-  gulp.src("./client/js/*.coffee", {ignore: ["vendor"]})
+  gulp.src(["./client/js/*.coffee". "!./client/js/vendor/**"])
     .pipe(coffee())
     .pipe(minify())
     .pipe(gulp.dest("./public/js"));
@@ -94,9 +96,9 @@ gulp.task('default', function(){
 });
 ```
 
-### gulp.src(glob[, opt])
+### gulp.src(globs[, opt])
 
-Takes a glob and represents a file structure. Can be piped to plugins. You can specify a single glob or an array of globs (see docs)56. All options are passed directly through to [glob-stream](https://github.com/wearefractal/glob-stream). See the [glob-stream documentation](https://github.com/wearefractal/glob-stream) for more information.
+Takes a glob and represents a file structure. Can be piped to plugins. You can specify a single glob or an array of globs (see docs). All options are passed directly through to [glob-stream](https://github.com/wearefractal/glob-stream). See the [glob-stream documentation](https://github.com/wearefractal/glob-stream) for more information.
 
 ```javascript
 gulp.src("./client/templates/*.jade")
@@ -107,7 +109,7 @@ gulp.src("./client/templates/*.jade")
 
 ##### Options
 
-`buffer: false` will return file.content as a stream and not buffer files.
+`buffer: false` will return file.content as a stream and not buffer files. This may not be supported by many plugins.
 
 `read: false` will return file.content as null and not read the file at all.
 
