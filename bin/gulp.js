@@ -142,8 +142,8 @@ function logEvents(gulp) {
     var time = prettyTime(e.hrDuration);
     gutil.log('Errored', "'" + gutil.colors.cyan(e.task) + "'", 'in', gutil.colors.magenta(time), gutil.colors.red(msg));
   });
-  gulp.on('task_not_found', function (name) {
-    gutil.log(gutil.colors.red("Task '" + name + "' was not defined in your gulpfile but you try to run it"));
+  gulp.on('task_not_found', function (err) {
+    gutil.log(gutil.colors.red("Task '" + err.task + "' was not defined in your gulpfile but you try to run it"));
     gutil.log('Please check the documentation for proper gulpfile formatting.');
     process.exit(1);
   });
