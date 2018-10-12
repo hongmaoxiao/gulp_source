@@ -1,38 +1,26 @@
 # Using external config file
-## bonus: keeping those tasks DRY
-## bonus2: config.json can be used by another task runner, like `Grunt`
-
----
+## bonus: keeping tose tasks DRY
 
 `config.json`
 
 ```json
 {
   "desktop" : {
-    "src" : [
-      "dev/desktop/js/**/*.js",
-      "!dev/desktop/js/vendor/**"
-    ],
+    "src" : [ "dev/desktop/js/**/*.js", "!dev/desktop/js/vendor/**"],
     "dest" : "build/desktop/js"
   },
   "mobile" : {
-    "src" : [
-      "dev/mobile/js/**/*.js",
-      "!dev/mobile/js/vendor/**"
-    ],
+    "src" : [ "dev/mobile/js/**/*.js", "!dev/mobile/js/vendor/**"],
     "dest" : "build/mobile/js"
   }
 }
 ```
 
----
-
 `gulpfile.js`
 
 ```js
-// npm install gulp gulp-uglify
+// npm install gulp 
 var gulp   = require('gulp');
-var uglify = require('gulp-uglify');
 var config = require('./config.json');
 
 function doStuff(cfg) {
@@ -46,4 +34,3 @@ gulp.task('dry', function () {
   doStuff(config.mobile);
 });
 ```
-
