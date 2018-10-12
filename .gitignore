@@ -4,6 +4,7 @@ node_modules
 build
 *.node
 components
+coverage
 .vscode
 *.orig
 .idea
