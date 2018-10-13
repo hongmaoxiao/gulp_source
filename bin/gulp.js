@@ -140,7 +140,7 @@ function getGulpFile(baseDir) {
   } else {
     extensions = ['.js'];
   }
-  var gulpFile = findup('gulpfile{' + extensions + '}', { nocase: true });
+  var gulpFile = findup('gulpfile{' + extensions + '}', { cwd: cwd, nocase: true });
   return gulpFile;
 }
 
