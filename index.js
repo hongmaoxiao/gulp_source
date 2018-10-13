@@ -4,6 +4,7 @@
 var util = require('util');
 var Orchestrator = require('orchestrator');
 var gutil = require('gulp-util');
+var vfs = require('vinyl-fs');
 
 function Gulp() {
   Orchestrator.call(this);
@@ -18,9 +19,9 @@ Gulp.prototype.run = function () {
   var tasks = arguments.length ? arguments : ['default'];
   this.start.apply(this, tasks);
 };
-Gulp.prototype.src = require('./lib/createInputStream');
-Gulp.prototype.dest = require('./lib/createOutputStream');
-Gulp.prototype.watch = require('glob-watcher');
+Gulp.prototype.src = vfs.src;
+Gulp.prototype.dest = vfs.dest;
+Gulp.prototype.watch = vfs.watch;
 
 // let people use this class from our instance
 Gulp.prototype.Gulp = Gulp;
