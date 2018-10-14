@@ -10,3 +10,4 @@ coverage
 .idea
 sandbox
 test/out-fixtures/*
+test/watch-*.txt
