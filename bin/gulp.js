@@ -128,14 +128,22 @@ function loadGulpFile(localGulp, gulpFile, tasks) {
   gutil.log('Working directory changed to', gutil.colors.magenta(gulpFileCwd));
 
   var theGulpfile = require(gulpFile);
+
   // just for good measure
   process.nextTick(function () {
     if (argv.tasks) {
       return logTasks(gulpFile, localGulp);
     }
-    localGulp.run.apply(localGulp, tasks);
+
+    startGulp(localGulp, tasks);
   });
   return theGulpfile;
+}
+
+function startGulp(localGulp, tasks) {
+  // impose our opinion of "default" tasks onto orchestrator
+  var toRun = tasks.length ? tasks : ['default'];
+  return localGulp.start.apply(localGulp, toRun);
 }
 
 function logTasks(gulpFile, localGulp) {
